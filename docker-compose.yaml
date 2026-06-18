@@ -4,5 +4,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8443:8443"
+    restart: unless-stopped
+    # Plain HTTP; assign a domain to this service in Coolify (port 8080) and let
+    # Coolify/Traefik terminate TLS.
+    expose:
+      - "8080"
+    volumes:
+      # Persists the DuckDB UI notebooks/flows (extension_data/ui/ui.db).
+      # Mount ONLY extension_data so the duckdb binary stays fresh from the image.
+      - duckdb-flows:/var/lib/haproxy/.duckdb/extension_data
+
+volumes:
+  duckdb-flows:
