@@ -10,6 +10,7 @@ USER haproxy
 # and bake the `ui` extension into the image so first run needs no network and
 # the build fails fast if the pinned version lacks the extension.
 RUN curl https://install.duckdb.org | DUCKDB_VERSION=1.5.3 sh \
+    && ln -sfn /var/lib/haproxy/.duckdb/cli/1.5.3 /var/lib/haproxy/.duckdb/cli/latest \
     && /var/lib/haproxy/.duckdb/cli/latest/duckdb -c "INSTALL ui; LOAD ui;"
 
 # Copy custom configuration file from the current directory
