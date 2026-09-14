@@ -6,11 +6,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl screen ca-
     && rm -rf /var/lib/apt/lists/*
 
 USER haproxy
-# Install a pinned DuckDB CLI (1.5.4's `ui` extension is not published yet -> 404)
+# Install a pinned DuckDB CLI (the `ui` extension must be published for the pinned version)
 # and bake the `ui` extension into the image so first run needs no network and
 # the build fails fast if the pinned version lacks the extension.
-RUN curl https://install.duckdb.org | DUCKDB_VERSION=1.5.3 sh \
-    && ln -sfn /var/lib/haproxy/.duckdb/cli/1.5.3 /var/lib/haproxy/.duckdb/cli/latest \
+RUN curl https://install.duckdb.org | DUCKDB_VERSION=1.5.5 sh \
+    && ln -sfn /var/lib/haproxy/.duckdb/cli/1.5.5 /var/lib/haproxy/.duckdb/cli/latest \
     && /var/lib/haproxy/.duckdb/cli/latest/duckdb -c "INSTALL ui; LOAD ui;"
 
 # Copy custom configuration file from the current directory
